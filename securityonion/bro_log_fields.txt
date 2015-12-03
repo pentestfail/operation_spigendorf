@@ -1,0 +1,137 @@
+app_stats
+#fields	ts	ts_delta	app	uniq_hosts	hits	bytes
+#types	time	interval	string	count	count	count
+
+capture_loss
+#fields	ts	ts_delta	peer	gaps	acks	percent_lost
+#types	time	interval	string	count	count	double
+
+communication
+#fields	ts	peer	src_name	connected_peer_desc	connected_peer_addr	connected_peer_port	level	message
+#types	time	string	string	string	addr	port	string	string
+
+conn
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	local_resp	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents	orig_cc	resp_csensorname
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	bool	count	string	count	count	count	count	set[string]	string	string	string
+
+*conn-summary (do not ingest)
+
+dhcp
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	mac	assigned_ip	lease_time	trans_id
+#types	time	string	addr	port	addr	port	string	addr	interval	count
+
+dns
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	trans_id	query	qclass	qclass_name	qtype	qtype_name	rcode	rcode_name	AA	TC	RD	RA	Z	answerTTLs	rejected
+#types	time	string	addr	port	addr	port	enum	count	stringcount	string	count	string	count	string	bool	bool	bool	bool	count	vector[string]	vector[interval]	bool
+
+*dpd
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	analyzer	failure_reason
+#types	time	string	addr	port	addr	port	enum	string	string
+
+files
+#fields	ts	fuid	tx_hosts	rx_hosts	conn_uids	sourcedepth	analyzers	mime_type	filename	duration	local_orig	is_orig	seen_bytes	total_bytes	missing_bytes	overflow_bytestimedout	parent_fuid	md5	sha1	sha256	extracted
+#types	time	string	set[addr]	set[addr]	set[string]	stringcount	set[string]	string	string	interval	bool	bool	count	count	count	count	bool	string	string	string	string	string
+
+ftp
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	user	password	command	arg	mime_type	file_size	reply_code	reply_msg	data_channel.passive	data_channel.orig_h	data_channel.resp_h	data_channel.resp_p	fuid
+#types	time	string	addr	port	addr	port	string	string	stringstring	string	count	count	string	bool	addr	addr	port	string
+
+http_*
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	trans_depth	method	host	uri	referrer	user_agent	request_body_len	response_body_len	status_code	status_msg	info_code	info_msg	filename	tags	username	password	proxied	orig_fuids	orig_mime_types	resp_fuids	resp_mime_types
+#types	time	string	addr	port	addr	port	count	string	stringstring	string	string	count	count	count	string	count	string	stringset[enum]	string	string	set[string]	vector[string]	vector[string]vector[string]	vector[string]
+
+*intel
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	seen.indicator	seen.indicator_type	seen.where	seen.node	sources
+#types	time	string	addr	port	addr	port	string	string	stringstring	enum	enum	string	set[string]
+
+irc
+
+
+*kerberos
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	request_type	client	service	success	error_msg	from	till	cipher	forwardable	renewable	client_cert_subject	client_cert_fuid	server_cert_subject	server_cert_fuid
+#types	time	string	addr	port	addr	port	string	string	stringbool	string	time	time	string	bool	bool	string	string	stringstring
+
+*known_certs
+#fields	ts	host	port_num	subject	issuer_subject	serial
+#types	time	addr	port	string	string	string
+
+known_hosts
+#fields	ts	host
+#types	time	addr
+
+known_services
+#fields	ts	host	port_num	port_proto	service
+#types	time	addr	port	enum	set[string]
+
+*loaded_scripts
+#fields	name
+#types	string
+
+*mysql
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	cmd	arg	success	rows	response
+#types	time	string	addr	port	addr	port	string	string	bool	count	string
+
+notice
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropperemote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	stringenum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+
+*notice_alarm
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropperemote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	stringenum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+
+*packet_filter
+#fields	ts	node	filter	init	success
+#types	time	string	string	bool	bool
+
+pe
+#fields	ts	id	machine	compile_ts	os	subsystem	is_exe	is_64bit	uses_aslr	uses_dep	uses_code_integrity	uses_seh	has_import_table	has_export_table	has_cert_table	has_debug_data	section_names
+#types	time	string	string	time	string	string	bool	bool	bool	bool	bool	bool	bool	bool	bool	bool	vector[string]
+
+rdp
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	cookie	result	security_protocol	keyboard_layout	client_build	client_name	client_dig_product_id	desktop_width	desktop_height	requested_color_depth	cert_type	cert_count	cert_permanent	encryption_level	encryption_method
+#types	time	string	addr	port	addr	port	string	string	string	string	string	string	string	count	count	string	string	count	bool	string	string
+
+*reporter
+#fields	ts	level	message	location
+#types	time	enum	string	string
+
+smtp
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	trans_depth	helo	mailfrom	rcptto	date	from	to	reply_to	msg_id	in_reply_to	subject	x_originating_ip	first_receivedsecond_received	last_reply	path	user_agent	tls	fuids	is_webmail
+#types	time	string	addr	port	addr	port	count	string	stringset[string]	string	string	set[string]	string	string	string	stringaddr	string	string	string	vector[addr]	string	bool	vector[string]bool
+
+smtp_entities
+
+
+snmp
+
+
+software
+#fields	ts	host	host_p	software_type	name	version.major	version.minor	version.minor2	version.minor3	version.addl	unparsed_version
+#types	time	addr	port	enum	string	count	count	count	count	string	string
+
+ssh
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	version	auth_success	direction	client	server	cipher_alg	mac_alg	compression_alg	kex_alg	host_key_alg	host_key	remote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	count	bool	enum	string	string	string	string	string	string	string	string	string	stringstring	double	double
+
+ssl
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	version	cipher	curve	server_name	resumed	last_alert	next_protocol	established	cert_chain_fuids	client_cert_chain_fuids	subjecissuer	client_subject	client_issuer	validation_status
+#types	time	string	addr	port	addr	port	string	string	stringstring	bool	string	string	bool	vector[string]	vector[string]	stringstring	string	string	string
+
+stats
+
+
+syslog
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	facility	severity	message
+#types	time	string	addr	port	addr	port	enum	string	stringstring
+
+tunnels
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	tunnel_type	action
+#types	time	string	addr	port	addr	port	enum	enum
+
+weird
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	name	addl	notice	peer
+#types	time	string	addr	port	addr	port	string	string	bool	string
+
+*x509
+#fields	ts	id	certificate.version	certificate.serial	certificate.subject	certificate.issuer	certificate.not_valid_before	certificate.not_valid_after	certificate.key_alg	certificate.sig_alg	certificate.key_type	certificate.key_length	certificate.exponent	certificate.curve	san.dns	san.uri	san.email	san.ip	basic_constraints.ca	basic_constraints.path_len
+#types	time	string	count	string	string	string	time	time	stringstring	string	count	string	string	vector[string]	vector[string]	vector[string]	vector[addr]	bool	count
